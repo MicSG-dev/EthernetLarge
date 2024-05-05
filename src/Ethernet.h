@@ -45,7 +45,7 @@
 // can really help with UDP protocols like Artnet.  In theory larger
 // buffers should allow faster TCP over high-latency links, but this
 // does not always seem to work in practice (maybe WIZnet bugs?)
-//#define ETHERNET_LARGE_BUFFERS
+#define ETHERNET_LARGE_BUFFERS
 
 
 #include <Arduino.h>
