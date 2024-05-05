@@ -3,6 +3,9 @@ Ethernet library for Arduino with compatibility for the [SSLClient](https://gith
 
 Library was based on the Arduino Ethernet Library: https://github.com/arduino-libraries/Ethernet
 
+## Instructions for Generating Certificate
+To generate the certificate (which will be stored in `trust_anchors.h`, file located next to the sketch), access https://openslab-osu.github.io/bearssl-certificate-utility/ and enter the websites you will access.
+
 ## License
 
 Copyright (c) 2010 Arduino LLC. All right reserved.
