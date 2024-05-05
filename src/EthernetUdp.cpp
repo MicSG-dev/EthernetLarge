@@ -27,7 +27,7 @@
  */
 
 #include <Arduino.h>
-#include "Ethernet.h"
+#include "EthernetLarge.h"
 #include "Dns.h"
 #include "utility/w5100.h"
 
