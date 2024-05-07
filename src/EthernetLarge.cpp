@@ -24,29 +24,25 @@
 #include "Dhcp.h"
 
 IPAddress EthernetClass::_dnsServerAddress;
-DhcpClass* EthernetClass::_dhcp = NULL;
+DhcpClass *EthernetClass::_dhcp = NULL;
 
 int EthernetClass::begin(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
-{
-	
-	return begin(mac, NULL, timeout, responseTimeout);
-}
-
-int EthernetClass::begin(uint8_t *mac, const char* hostname, unsigned long timeout, unsigned long responseTimeout)
 {
 	static DhcpClass s_dhcp;
 	_dhcp = &s_dhcp;
 
 	// Initialise the basic info
-	if (W5100.init() == 0) return 0;
+	if (W5100.init() == 0)
+		return 0;
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 	W5100.setMACAddress(mac);
-	W5100.setIPAddress(IPAddress(0,0,0,0).raw_address());
+	W5100.setIPAddress(IPAddress(0, 0, 0, 0).raw_address());
 	SPI.endTransaction();
 
 	// Now try to get our config info from a DHCP server
-	int ret = _dhcp->beginWithDHCP(mac, hostname, timeout, responseTimeout);
-	if (ret == 1) {
+	int ret = _dhcp->beginWithDHCP(mac, timeout, responseTimeout);
+	if (ret == 1)
+	{
 		// We've successfully found a DHCP server and got our configuration
 		// info, so set things accordingly
 		SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
@@ -86,7 +82,8 @@ void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress g
 
 void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet)
 {
-	if (W5100.init() == 0) return;
+	if (W5100.init() == 0)
+		return;
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 	W5100.setMACAddress(mac);
 	W5100.setIPAddress(ip.raw_address());
@@ -103,37 +100,49 @@ void EthernetClass::init(uint8_t sspin)
 
 EthernetLinkStatus EthernetClass::linkStatus()
 {
-	switch (W5100.getLinkStatus()) {
-		case UNKNOWN:  return Unknown;
-		case LINK_ON:  return LinkON;
-		case LINK_OFF: return LinkOFF;
-		default:       return Unknown;
+	switch (W5100.getLinkStatus())
+	{
+	case UNKNOWN:
+		return Unknown;
+	case LINK_ON:
+		return LinkON;
+	case LINK_OFF:
+		return LinkOFF;
+	default:
+		return Unknown;
 	}
 }
 
 EthernetHardwareStatus EthernetClass::hardwareStatus()
 {
-	switch (W5100.getChip()) {
-		case 51: return EthernetW5100;
-		case 52: return EthernetW5200;
-		case 55: return EthernetW5500;
-		default: return EthernetNoHardware;
+	switch (W5100.getChip())
+	{
+	case 51:
+		return EthernetW5100;
+	case 52:
+		return EthernetW5200;
+	case 55:
+		return EthernetW5500;
+	default:
+		return EthernetNoHardware;
 	}
 }
 
 int EthernetClass::maintain()
 {
 	int rc = DHCP_CHECK_NONE;
-	if (_dhcp != NULL) {
+	if (_dhcp != NULL)
+	{
 		// we have a pointer to dhcp, use it
 		rc = _dhcp->checkLease();
-		switch (rc) {
+		switch (rc)
+		{
 		case DHCP_CHECK_NONE:
-			//nothing done
+			// nothing done
 			break;
 		case DHCP_CHECK_RENEW_OK:
 		case DHCP_CHECK_REBIND_OK:
-			//we might have got a new IP.
+			// we might have got a new IP.
 			SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 			W5100.setIPAddress(_dhcp->getLocalIp().raw_address());
 			W5100.setGatewayIp(_dhcp->getGatewayIp().raw_address());
@@ -142,13 +151,12 @@ int EthernetClass::maintain()
 			_dnsServerAddress = _dhcp->getDnsServerIp();
 			break;
 		default:
-			//this is actually an error, it will retry though
+			// this is actually an error, it will retry though
 			break;
 		}
 	}
 	return rc;
 }
-
 
 void EthernetClass::MACAddress(uint8_t *mac_address)
 {
@@ -217,7 +225,8 @@ void EthernetClass::setGatewayIP(const IPAddress gateway)
 
 void EthernetClass::setRetransmissionTimeout(uint16_t milliseconds)
 {
-	if (milliseconds > 6553) milliseconds = 6553;
+	if (milliseconds > 6553)
+		milliseconds = 6553;
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 	W5100.setRetransmissionTime(milliseconds * 10);
 	SPI.endTransaction();
@@ -229,17 +238,5 @@ void EthernetClass::setRetransmissionCount(uint8_t num)
 	W5100.setRetransmissionCount(num);
 	SPI.endTransaction();
 }
-
-const char* EthernetClass::hostname() const
-{
-	return _dhcp ? _dhcp->getHostname() : "";
-}
-
-
-
-
-
-
-
 
 EthernetClass Ethernet;
