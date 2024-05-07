@@ -24,7 +24,7 @@
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 
 char server[] = "sistemas.micsg.com.br";     // name address for site
-char path[] = "/ethernet-large-get-example"; // https://sistemas.micsg.com.br/ethernet-large-get-example
+char query[] = "GET /ethernet-large-get-example"; // https://sistemas.micsg.com.br/ethernet-large-get-example
 
 // Set the static IP, Mask, DNS, gateway address to use if the DHCP fails to assign
 #define MYIPADDR 192, 168, 1, 28
@@ -117,8 +117,7 @@ void setup()
   {
     Serial.print("connected to ");
     // Make a HTTP request:
-    client.print("GET /");
-    client.print(path);
+    client.print(query);
     client.println(" HTTP/1.1");
     client.print("Host: ");
     client.println(server);
