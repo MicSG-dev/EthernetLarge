@@ -38,6 +38,11 @@ int EthernetClass::begin(uint8_t *mac, unsigned long timeout, unsigned long resp
 	W5100.setMACAddress(mac);
 	W5100.setIPAddress(IPAddress(0, 0, 0, 0).raw_address());
 	SPI.endTransaction();
+	
+	if (strlen(_customHostname) != 0)
+	{
+		_dhcp->setCustomHostname(_customHostname);
+	}
 
 	// Now try to get our config info from a DHCP server
 	int ret = _dhcp->beginWithDHCP(mac, timeout, responseTimeout);
@@ -237,6 +242,12 @@ void EthernetClass::setRetransmissionCount(uint8_t num)
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 	W5100.setRetransmissionCount(num);
 	SPI.endTransaction();
+}
+
+void EthernetClass::setHostname(const char *hostname)
+{
+	memset(_customHostname, 0, 32);
+	memcpy((void *)_customHostname, (void *)hostname, strlen(hostname) >= 31 ? 31 : strlen(hostname));
 }
 
 EthernetClass Ethernet;

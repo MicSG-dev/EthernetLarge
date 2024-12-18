@@ -73,12 +73,13 @@ class EthernetClass
 private:
 	static IPAddress _dnsServerAddress;
 	static DhcpClass *_dhcp;
+	char _customHostname[32];
 
 public:
 	// Initialise the Ethernet shield to use the provided MAC address and
 	// gain the rest of the configuration through DHCP.
 	// Returns 0 if the DHCP configuration failed, and 1 if it succeeded
-	static int begin(uint8_t *mac, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
+	int begin(uint8_t *mac, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
 	static int maintain();
 	static EthernetLinkStatus linkStatus();
 	static EthernetHardwareStatus hardwareStatus();
@@ -91,6 +92,9 @@ public:
 	static void init(uint8_t sspin = 10);
 
 	static void MACAddress(uint8_t *mac_address);
+
+	void setHostname(const char *hostname);
+
 	static IPAddress localIP();
 	static IPAddress subnetMask();
 	static IPAddress gatewayIP();
@@ -213,7 +217,7 @@ class EthernetClient : public Client
 public:
 	EthernetClient() : _sockindex(MAX_SOCK_NUM), _timeout(1000) {}
 	EthernetClient(uint8_t s) : _sockindex(s), _timeout(1000) {}
-	virtual ~EthernetClient(){};
+	virtual ~EthernetClient() {};
 
 	uint8_t status();
 	virtual int connect(IPAddress ip, uint16_t port);
@@ -273,6 +277,7 @@ class DhcpClass
 private:
 	uint32_t _dhcpInitialTransactionId;
 	uint32_t _dhcpTransactionId;
+	char *_customHostname;
 	uint8_t _dhcpMacAddr[6];
 #ifdef __arm__
 	uint8_t _dhcpLocalIp[4] __attribute__((aligned(4)));
@@ -313,8 +318,9 @@ public:
 	IPAddress getDnsServerIp();
 
 	int beginWithDHCP(uint8_t *, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
-	int beginWithDHCP(uint8_t *, const char *, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
 	int checkLease();
+	void setCustomHostname(char *hostname);
+	// char * getCustomHostname();
 };
 
 #endif
