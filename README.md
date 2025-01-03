@@ -1,5 +1,7 @@
 # Ethernet Large
-Ethernet library for Arduino with compatibility for the [SSLClient](https://github.com/OPEnSLab-OSU/SSLClient) library for using HTTPS connections.
+Ethernet library for Arduino with compatibility for the [SSLClient](https://github.com/OPEnSLab-OSU/SSLClient) library for using HTTPS connections. 
+
+Only compatible with W5500. W5100 support has been removed. To continue using the W5100 chip, use the [EthernetLargeW5100](https://github.com/MicSG-dev/EthernetLargeW5100) library.
 
 Library was based on the Arduino Ethernet Library: https://github.com/arduino-libraries/Ethernet
 
