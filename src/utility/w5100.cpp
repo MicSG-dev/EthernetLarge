@@ -469,6 +469,14 @@ void W5100Class::execCmdSn(SOCKET s, SockCMD _cmd)
 {
 	// Send command to socket
 	writeSnCR(s, _cmd);
-	// Wait for command to complete
-	while (readSnCR(s)) ;
+
+	if (_cmd == Sock_CONNECT || _cmd == Sock_DISCON)
+	{
+		delayMicroseconds(1);
+	}
+
+	do
+	{
+		delayMicroseconds(1);
+	} while (readSnCR(s));
 }
