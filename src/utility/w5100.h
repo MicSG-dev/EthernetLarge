@@ -25,7 +25,8 @@
 //  Higher SPI clock only results in faster transfer to hosts on a LAN
 //  or with very low packet latency.  With ordinary internet latency,
 //  the TCP window size & packet loss determine your overall speed.
-#define SPI_ETHERNET_SETTINGS SPISettings(30000000, MSBFIRST, SPI_MODE0)
+//#define SPI_ETHERNET_SETTINGS SPISettings(30000000, MSBFIRST, SPI_MODE0)
+#define SPI_ETHERNET_SETTINGS SPISettings(21000000, MSBFIRST, SPI_MODE0) // decrease the SPI clock frequency if the cables between the microcontroller and the W5500 are too long or if the Ethernet.begin() call is failing.
 
 
 // Require Ethernet.h, because we need MAX_SOCK_NUM
@@ -199,8 +200,8 @@ public:
   __GP_REGISTER8 (IMR,    0x0016);    // Interrupt Mask
   //__GP_REGISTER16(RTR,    0x0017);    // Timeout address //// incorrect for the W5500
   //__GP_REGISTER8 (RCR,    0x0019);    // Retry count //// incorrect for the W5500
-  //__GP_REGISTER8 (RMSR,   0x001A);    // Receive memory size (W5100 only) //// incorrect for the W5500
-  //__GP_REGISTER8 (TMSR,   0x001B);    // Transmit memory size (W5100 only) //// incorrect for the W5500
+  __GP_REGISTER8 (RMSR,   0x001A);    // Receive memory size
+  __GP_REGISTER8 (TMSR,   0x001B);    // Transmit memory size
   __GP_REGISTER8 (PATR,   0x001C);    // Authentication type address in PPPoE mode
   //__GP_REGISTER8 (PTIMER, 0x0028);    // PPP LCP Request Timer //// incorrect for the W5500
   //__GP_REGISTER8 (PMAGIC, 0x0029);    // PPP LCP Magic Number //// incorrect for the W5500
