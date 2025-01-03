@@ -33,7 +33,7 @@
 // of RAM are used for each socket.  Reducing the maximum can save RAM, but
 // you are limited to fewer simultaneous connections.
 
-#define MAX_SOCK_NUM 2
+#define MAX_SOCK_NUM 3
 
 // By default, each socket uses 2K buffers inside the WIZnet chip.  If
 // MAX_SOCK_NUM is set to fewer than the chip's maximum, uncommenting
